@@ -4,3 +4,9 @@
 yarn-error.log
 
 *.vim
+
+node_modules/
+dist/
+
+# raw design assets (processed webp versions live in src/assets/)
+design/
