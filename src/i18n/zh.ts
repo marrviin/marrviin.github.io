@@ -3,9 +3,8 @@ import type { Dict } from './en'
 export const zh: Dict = {
   wordmark: 'marrviin',
   site: {
-    kicker: '开源作品',
-    tagline: '前端工程师，为桌面与 Web 打造快速、原生般的开源工具。',
     scroll: '↓',
+    more: '更多项目正在浮出水面，敬请期待。',
   },
   project: {
     links: {
@@ -15,7 +14,10 @@ export const zh: Dict = {
     },
   },
   footer: {
-    built: '使用 React 与 Vite 构建',
+    nav: '项目',
+    elsewhere: '联络',
+    siteSource: '本站源码',
+    top: '回到顶部',
     rights: '保留所有权利。',
   },
 }

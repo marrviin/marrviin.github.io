@@ -1,5 +1,7 @@
-import shotDiffEn from '../assets/screenshots/app-diff-en.webp'
-import shotDiffZh from '../assets/screenshots/app-diff-zh.webp'
+import shotHomeEn from '../assets/screenshots/app-home-en.webp'
+import shotTextEn from '../assets/screenshots/app-text-en.webp'
+import shotFolderEn from '../assets/screenshots/app-folder-tree-en.webp'
+import shotGitEn from '../assets/screenshots/app-git-tree-en.webp'
 
 export interface Project {
   name: string
@@ -12,19 +14,22 @@ export interface Project {
   tagline: { en: string; zh: string }
   /** Optional bullet highlights, shown in the project's showcase section. */
   highlights?: { en: readonly string[]; zh: readonly string[] }
-  /** Optional real app screenshot, per UI language. */
-  shot?: { en: string; zh: string }
+  /** Optional real app screenshots (a clickable stack), shown in all languages. */
+  shots?: readonly string[]
+  /** Placeholder entries are kept here but hidden from the page until real. */
+  placeholder?: boolean
 }
 
 // Each project renders as its own full-screen showcase section.
-// PLACEHOLDER: entries 2-5 are layout samples with no real links yet —
-// swap in real projects (name/tagline/stack/repo) before launch.
+// PLACEHOLDER: entries 2-5 are layout samples with no real data yet —
+// fill them in (name/tagline/stack/repo) and drop the `placeholder`
+// flag to publish. Only non-placeholder entries render on the page.
 export const projects: readonly Project[] = [
   {
-    name: 'Comparator',
-    repo: 'https://github.com/marrviin/comparator',
-    website: 'https://marrviin.github.io/comparator/',
-    download: 'https://github.com/marrviin/comparator/releases/latest',
+    name: 'Manta Compare',
+    repo: 'https://github.com/marrviin/manta-compare',
+    website: 'https://marrviin.github.io/manta-compare/',
+    download: 'https://github.com/marrviin/manta-compare/releases/latest',
     stack: ['Tauri 2', 'Rust', 'React 19', 'Monaco Editor', 'TypeScript'],
     tagline: {
       en: 'A fast, cross-platform diff tool for text, folders & Git — free and open source.',
@@ -44,10 +49,11 @@ export const projects: readonly Project[] = [
         '提供 macOS、Windows、Linux 原生安装包',
       ],
     },
-    shot: { en: shotDiffEn, zh: shotDiffZh },
+    shots: [shotHomeEn, shotTextEn, shotFolderEn, shotGitEn],
   },
   {
     name: 'Reef UI',
+    placeholder: true,
     stack: ['React 19', 'TypeScript', 'CSS Layers', 'Storybook'],
     tagline: {
       en: 'Quilling-inspired React component library — paper-craft texture for modern interfaces',
@@ -56,6 +62,7 @@ export const projects: readonly Project[] = [
   },
   {
     name: 'Quill Motion',
+    placeholder: true,
     stack: ['TypeScript', 'rAF', 'Zero deps'],
     tagline: {
       en: '2 kB spring-physics animation micro-library with scroll & pointer orchestration',
@@ -64,6 +71,7 @@ export const projects: readonly Project[] = [
   },
   {
     name: 'Tidetable',
+    placeholder: true,
     stack: ['React', 'Web Worker', 'Canvas'],
     tagline: {
       en: 'Virtualized data grid that stays at 60 fps with a million rows',
@@ -72,6 +80,7 @@ export const projects: readonly Project[] = [
   },
   {
     name: 'Manta CLI',
+    placeholder: true,
     stack: ['Node.js', 'esbuild', 'TypeScript'],
     tagline: {
       en: 'Opinionated project scaffolder — one command from zero to a typed Vite app',
@@ -79,3 +88,6 @@ export const projects: readonly Project[] = [
     },
   },
 ]
+
+/** Only real projects render on the page — placeholders wait in the wings. */
+export const publishedProjects = projects.filter((p) => !p.placeholder)

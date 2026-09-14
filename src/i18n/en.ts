@@ -1,10 +1,8 @@
 export const en = {
   wordmark: 'marrviin',
   site: {
-    kicker: 'Open Source',
-    tagline:
-      'Front-end engineer crafting fast, native-feeling tools — from desktop apps to the open web.',
     scroll: '↓',
+    more: 'More projects are surfacing soon — stay tuned.',
   },
   project: {
     links: {
@@ -14,7 +12,10 @@ export const en = {
     },
   },
   footer: {
-    built: 'Built with React & Vite',
+    nav: 'Projects',
+    elsewhere: 'Elsewhere',
+    siteSource: 'Site source',
+    top: 'Back to top',
     rights: 'All rights reserved.',
   },
 }

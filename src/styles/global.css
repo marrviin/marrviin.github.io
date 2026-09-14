@@ -1,3 +1,5 @@
+@import 'tailwindcss';
+
 /* ---------------------------------------------------------------------------
    Fonts — self-hosted Space Grotesk (variable 300–700, latin subset)
 --------------------------------------------------------------------------- */
@@ -7,219 +9,55 @@
   font-weight: 300 700;
   font-display: swap;
   src: url('/fonts/space-grotesk-var.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2013-2014, U+2018-201A,
-    U+201C-201E, U+2022, U+2026, U+2191, U+2193, U+2212, U+2215;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+2013-2014, U+2018-201A, U+201C-201E, U+2022, U+2026, U+2191,
+    U+2193, U+2212, U+2215;
 }
 
 /* ---------------------------------------------------------------------------
-   Design tokens — light quilled-ocean paper theme
+   Theme — deep-sea night quilled-ocean tokens.
+   --ease-out deliberately overrides Tailwind's default so every `ease-out`
+   utility across the site uses the quilled-ocean curve.
 --------------------------------------------------------------------------- */
-:root {
-  --bg: #f2f8f9;
-  --bg-panel: #ffffff;
-  --border: rgba(20, 56, 79, 0.14);
-  --text: #14384f;
-  --text-muted: rgba(20, 56, 79, 0.66);
-  --text-faint: rgba(20, 56, 79, 0.42);
-  --accent: #1f7a99;
-  --accent-deep: #174d75;
-  --paper-edge: #f0f9fa;
-  --wave-tint: #d9ecf0;
-  --add: #2e7d5b;
-  --del: #b3423a;
-  --font-display: 'Space Grotesk', 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', sans-serif;
-  --font-body: 'Space Grotesk', 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', sans-serif;
-  --font-mono: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+@theme {
+  --color-bg: #050f1a;
+  --color-panel: #0a1e2f;
+  --color-edge: rgb(140 210 235 / 16%);
+  --color-ink: #d9edf5;
+  --color-ink-muted: rgb(217 237 245 / 68%);
+  --color-ink-faint: rgb(217 237 245 / 45%);
+  --color-accent: #4fc4e8;
+  --color-accent-deep: #9adcf0;
+  --color-on-accent: #04222f;
+  --color-paper-edge: #bfe6f2;
+  --color-wave-tint: #1a3d56;
+  --font-display: 'Space Grotesk', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-body: 'Space Grotesk', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', menlo, consolas, monospace;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --shadow-paper: 0 24px 60px rgba(23, 77, 117, 0.16);
+  --shadow-paper: 0 24px 60px rgb(2 10 18 / 55%);
+
+  /* the site's single breakpoint — the old 920px media query */
+  --breakpoint-ocean: 920px;
+  --animate-kenburns: kenburns 26s ease-in-out infinite alternate;
+  --animate-light-drift: light-drift 18s ease-in-out infinite alternate;
+  --animate-manta:
+    swim-in 1.6s var(--ease-out) both, manta-bob 6s 1.6s ease-in-out infinite alternate;
+  --animate-bob: bob 2.2s ease-in-out infinite;
+  --animate-coil-spin: coil-spin 26s linear infinite;
+  --animate-sub-hover: sub-hover 7s ease-in-out infinite alternate;
 }
 
-/* ---------------------------------------------------------------------------
-   Paper grain — full-page noise so everything reads as printed on paper
---------------------------------------------------------------------------- */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* ---------------------------------------------------------------------------
-   Reset & base
---------------------------------------------------------------------------- */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-ul {
-  list-style: none;
-}
-
-::selection {
-  background: var(--accent);
-  color: #fff;
-}
-
-/* ---------------------------------------------------------------------------
-   Scroll-reveal & entrances
---------------------------------------------------------------------------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity 0.9s var(--ease-out),
-    transform 0.9s var(--ease-out);
-}
-
-.reveal.is-revealed {
-  opacity: 1;
-  transform: none;
-}
-
-.reveal-item {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: rise 0.9s var(--ease-out) forwards;
-}
-
-.reveal-item:nth-child(1) { animation-delay: 0.1s; }
-.reveal-item:nth-child(2) { animation-delay: 0.22s; }
-.reveal-item:nth-child(3) { animation-delay: 0.38s; }
-.reveal-item:nth-child(4) { animation-delay: 0.52s; }
-.reveal-item:nth-child(5) { animation-delay: 0.66s; }
-
-@keyframes rise {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Topbar
---------------------------------------------------------------------------- */
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.1rem 1.6rem;
-}
-
-.topbar__wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: 0.02em;
-  color: var(--text);
-  padding: 0.4rem 0.9rem;
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-}
-
-.lang-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.45rem 0.9rem;
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--text-faint);
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: border-color 0.3s;
-}
-
-.lang-toggle:hover {
-  border-color: var(--accent);
-}
-
-.lang-toggle .is-active {
-  color: var(--accent);
-}
-
-.lang-toggle__divider {
-  opacity: 0.4;
-}
-
-/* ---------------------------------------------------------------------------
-   Hero — quilled ocean frame + floating manta, layered parallax
---------------------------------------------------------------------------- */
-.hero {
-  position: relative;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background: var(--bg);
-}
-
-.hero__bg {
-  position: absolute;
-  inset: -3%;
-  will-change: transform;
-}
-
-.hero__bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  animation: kenburns 26s ease-in-out infinite alternate;
-}
-
+/* Keyframes stay top-level (not inside @theme) so the component classes
+   below (.reveal-blur, .title-sheen) can reference them directly. */
 @keyframes kenburns {
-  from { transform: scale(1); }
-  to { transform: scale(1.06); }
-}
+  from {
+    transform: scale(1);
+  }
 
-/* soft light drifting across the paper — reads as light on water */
-.hero__light {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  mix-blend-mode: soft-light;
-  background:
-    radial-gradient(42rem 30rem at 22% 30%, rgba(255, 255, 255, 0.9), transparent 65%),
-    radial-gradient(50rem 36rem at 78% 72%, rgba(255, 255, 255, 0.75), transparent 65%);
-  animation: light-drift 18s ease-in-out infinite alternate;
+  to {
+    transform: scale(1.06);
+  }
 }
 
 @keyframes light-drift {
@@ -227,29 +65,11 @@ ul {
     transform: translate3d(-3%, -2%, 0) scale(1);
     opacity: 0.75;
   }
+
   to {
     transform: translate3d(3%, 3%, 0) scale(1.08);
     opacity: 1;
   }
-}
-
-.hero__manta {
-  position: absolute;
-  top: 50%;
-  right: 1vw;
-  width: min(46vw, 620px);
-  margin-top: -4%;
-  will-change: transform;
-  filter: drop-shadow(0 30px 40px rgba(12, 51, 77, 0.28));
-}
-
-.hero__manta img {
-  width: 100%;
-  height: auto;
-  display: block;
-  animation:
-    swim-in 1.6s var(--ease-out) both,
-    manta-bob 6s 1.6s ease-in-out infinite alternate;
 }
 
 @keyframes swim-in {
@@ -257,6 +77,7 @@ ul {
     opacity: 0;
     transform: translateX(9vw) rotate(4deg);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -264,47 +85,14 @@ ul {
 }
 
 @keyframes manta-bob {
-  from { transform: translateY(-10px) rotate(-1deg); }
-  to { transform: translateY(12px) rotate(1.2deg); }
-}
+  from {
+    transform: translateY(-10px) rotate(-1deg);
+  }
 
-.hero__content {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  will-change: transform, opacity;
+  to {
+    transform: translateY(12px) rotate(1.2deg);
+  }
 }
-
-/* soft frosted veil behind the copy — keeps text readable over the art */
-.hero__content::before {
-  content: '';
-  position: absolute;
-  inset: -14% -18%;
-  background: radial-gradient(
-    58% 62% at 50% 50%,
-    rgba(236, 249, 251, 0.85),
-    rgba(236, 249, 251, 0) 72%
-  );
-  pointer-events: none;
-}
-
-.hero__inner {
-  width: min(600px, 90vw);
-  margin: 0 auto;
-}
-
-/* blur-in entrance for hero copy */
-.reveal-blur {
-  opacity: 0;
-  transform: translateY(22px);
-  filter: blur(10px);
-  animation: blur-rise 1s var(--ease-out) forwards;
-}
-
-.reveal-blur:nth-child(1) { animation-delay: 0.15s; }
-.reveal-blur:nth-child(2) { animation-delay: 0.3s; }
-.reveal-blur:nth-child(3) { animation-delay: 0.48s; }
-.reveal-blur:nth-child(4) { animation-delay: 0.66s; }
 
 @keyframes blur-rise {
   to {
@@ -314,281 +102,45 @@ ul {
   }
 }
 
-.hero__kicker {
-  font-size: 0.9rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--accent-deep);
-  font-weight: 500;
-  margin-bottom: 1.2rem;
-}
-
-.hero__title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(3rem, 7.5vw, 5.4rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  /* deep blue with a slow sheen sweeping across the letters */
-  background: linear-gradient(
-    105deg,
-    var(--accent-deep) 0%,
-    var(--accent-deep) 40%,
-    #3d9dc4 50%,
-    var(--accent-deep) 60%,
-    var(--accent-deep) 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  /* entrance rise + endless sheen (disjoint properties, safe to combine) */
-  animation:
-    rise 1s var(--ease-out) 0.3s forwards,
-    title-sheen 7s ease-in-out infinite;
-  opacity: 0;
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes title-sheen {
-  0%, 100% { background-position: 12% 0; }
-  50% { background-position: 88% 0; }
+  0%,
+  100% {
+    background-position: 12% 0;
+  }
+
+  50% {
+    background-position: 88% 0;
+  }
 }
 
-.hero__tagline {
-  margin-top: 1.6rem;
-  font-size: clamp(1rem, 1.5vw, 1.15rem);
-  color: var(--text-muted);
-  max-width: 34em;
-}
-
-.hero__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: 2rem;
-}
-
-.hero__scroll {
-  position: absolute;
-  bottom: 1.6rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-  color: var(--paper-edge);
-  font-size: 1.2rem;
-  text-shadow: 0 1px 8px rgba(12, 51, 77, 0.5);
-  animation: bob 2.2s ease-in-out infinite;
-}
-
+/* strips laid on water — the hero keeps -translate-x-1/2 as the independent
+   `translate` property, so this keyframe only owns the vertical bob */
 @keyframes bob {
-  0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, 8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(8px);
+  }
 }
 
-/* ---------------------------------------------------------------------------
-   Buttons
---------------------------------------------------------------------------- */
-.btn {
-  display: inline-block;
-  padding: 0.7rem 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  color: var(--text);
-  font-size: 0.9rem;
-  transition:
-    border-color 0.3s,
-    background 0.3s,
-    transform 0.3s var(--ease-out);
-}
+@keyframes strip-drift {
+  from {
+    transform: translateX(-5px);
+  }
 
-.btn:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.btn--solid {
-  background: var(--accent-deep);
-  border-color: var(--accent-deep);
-  color: #fff;
-  font-weight: 500;
-}
-
-.btn--solid:hover {
-  background: #1d5d84;
-  border-color: #1d5d84;
-}
-
-/* ---------------------------------------------------------------------------
-   Showcase — one full-screen section per project
---------------------------------------------------------------------------- */
-.showcase {
-  position: relative;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  padding: clamp(4rem, 8vw, 6rem) 0;
-  background: var(--bg);
-  scroll-margin-top: 2.5rem;
-}
-
-.showcase__inner {
-  width: min(1160px, 92vw);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: clamp(2.5rem, 6vw, 5rem);
-  align-items: center;
-}
-
-/* mirror every second showcase for rhythm */
-.showcase:nth-of-type(2n) .showcase__inner {
-  grid-template-columns: 0.95fr 1.05fr;
-}
-
-.showcase:nth-of-type(2n) .showcase__text {
-  order: 2;
-}
-
-.showcase__index {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(3.6rem, 7vw, 6rem);
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(31, 122, 153, 0.3);
-}
-
-.showcase__name {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  letter-spacing: -0.02em;
-  color: var(--accent-deep);
-  margin-top: 0.6rem;
-}
-
-.showcase__tagline {
-  margin-top: 1.1rem;
-  color: var(--text-muted);
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
-  max-width: 34em;
-}
-
-.showcase__list {
-  display: grid;
-  gap: 0.9rem;
-  margin-top: 1.8rem;
-}
-
-.showcase__list li {
-  position: relative;
-  padding-left: 1.6rem;
-  color: var(--text-muted);
-  font-size: 1.02rem;
-}
-
-.showcase__list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.42em;
-  width: 0.85rem;
-  height: 0.85rem;
-  border-radius: 50%;
-  border: 3px solid var(--accent);
-  opacity: 0.7;
-}
-
-.showcase__tech {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1.8rem;
-}
-
-.showcase__tech li {
-  padding: 0.3rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-.showcase__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: 2rem;
-}
-
-.showcase__visual {
-  perspective: 1100px;
-}
-
-/* real app screenshot in a paper frame */
-.showcase__shot {
-  position: relative;
-  margin: 0;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: var(--shadow-paper);
-  transition: transform 0.18s ease-out;
-  will-change: transform;
-}
-
-/* pointer-tracked sheen (vars set from JS) */
-.showcase__shot::after,
-.showcase__panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    56% 46% at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.4),
-    transparent 62%
-  );
-  opacity: 0;
-  transition: opacity 0.35s;
-}
-
-.showcase__shot:hover::after,
-.showcase__panel:hover::after {
-  opacity: 1;
-}
-
-.showcase__shot img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-/* typographic panel for projects without a screenshot */
-.showcase__panel {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(150deg, #ffffff 0%, var(--paper-edge) 60%, rgba(240, 249, 250, 0.4) 100%);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: var(--shadow-paper);
-  transition: transform 0.18s ease-out;
-  will-change: transform;
-}
-
-.showcase__coil {
-  position: absolute;
-  width: 72%;
-  opacity: 0.16;
-  animation: coil-spin 26s linear infinite;
+  to {
+    transform: translateX(5px);
+  }
 }
 
 @keyframes coil-spin {
@@ -597,158 +149,190 @@ ul {
   }
 }
 
-.showcase__initial {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(5rem, 10vw, 8.5rem);
-  color: var(--accent-deep);
-  opacity: 0.85;
+@keyframes sub-hover {
+  from {
+    transform: translateY(-5px) rotate(-0.6deg);
+  }
+
+  to {
+    transform: translateY(6px) rotate(0.7deg);
+  }
 }
 
 /* ---------------------------------------------------------------------------
-   Divider — full-bleed parallax ocean band with a swimming manta
+   Base
 --------------------------------------------------------------------------- */
-.divider {
-  position: relative;
-  height: 70vh;
-  overflow: hidden;
-}
+@layer base {
+  /* moonlit-depth grades laid over the light quilled artwork — kept light
+     so the ocean reads as a lit window into the deep */
+  :root {
+    --night-veil: linear-gradient(
+      180deg,
+      rgb(12 40 62 / 42%),
+      rgb(24 66 94 / 20%) 45%,
+      rgb(8 26 42 / 48%)
+    );
 
-.divider__frame {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
+    /* divider bands stay brighter */
+    --night-veil-band: linear-gradient(
+      180deg,
+      rgb(12 40 62 / 42%),
+      rgb(24 66 94 / 20%) 45%,
+      rgb(8 26 42 / 48%)
+    );
+  }
 
-.divider__bg {
-  position: absolute;
-  left: 0;
-  top: -35%;
-  width: 100%;
-  height: 170%;
-  object-fit: cover;
-  will-change: transform;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-.divider__manta {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: clamp(200px, 24vw, 400px);
-  filter: drop-shadow(0 26px 34px rgba(12, 51, 77, 0.35));
-  will-change: transform;
-}
+  body {
+    @apply bg-bg font-body text-base leading-[1.6] text-ink antialiased;
 
-/* wavy paper edges over the band — two layers read as quilling strips */
-.divider__wave {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: clamp(38px, 7vh, 72px);
-  z-index: 2;
-  pointer-events: none;
-  display: block;
-}
+    overflow-x: hidden;
+  }
 
-.divider__wave--top {
-  top: -1px;
-  filter: drop-shadow(0 3px 6px rgba(23, 77, 117, 0.1));
-}
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
 
-.divider__wave--bottom {
-  bottom: -1px;
-  filter: drop-shadow(0 -3px 6px rgba(23, 77, 117, 0.1));
+  /* paper grain — full-page noise so everything reads as printed on paper */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 }
-
 
 /* ---------------------------------------------------------------------------
-   Footer
+   Component hooks — the pieces that genuinely don't read as utilities:
+   JS class contracts, pseudo-element overlays, attribute states, staggers
 --------------------------------------------------------------------------- */
-.footer {
-  background: var(--accent-deep);
-  color: rgba(240, 249, 250, 0.85);
-  padding: 2.4rem 0;
+@layer components {
+  /* scroll-reveal — `.is-revealed` is added by src/hooks/use-reveal.ts */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+
+  .reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* blur-in entrance for hero copy, staggered per child */
+  .reveal-blur {
+    opacity: 0;
+    transform: translateY(22px);
+    filter: blur(10px);
+    animation: blur-rise 1s var(--ease-out) forwards;
+  }
+
+  .reveal-blur:nth-child(1) {
+    animation-delay: 0.15s;
+  }
+
+  .reveal-blur:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .reveal-blur:nth-child(3) {
+    animation-delay: 0.48s;
+  }
+
+  .reveal-blur:nth-child(4) {
+    animation-delay: 0.66s;
+  }
 }
 
-.footer__inner {
-  width: min(1120px, 92vw);
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  font-size: 0.85rem;
+/* deep sea-ink letters with a cyan glint sweeping through — entrance rise +
+   endless sheen (disjoint properties, safe to combine in one animation) */
+@utility title-sheen {
+  opacity: 0;
+  background: linear-gradient(
+    105deg,
+    #0b3550 0%,
+    #0b3550 40%,
+    #2aa9d2 50%,
+    #0b3550 60%,
+    #0b3550 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    rise 1s var(--ease-out) 0.3s forwards,
+    title-sheen 7s ease-in-out infinite;
 }
 
-.footer__meta a {
-  color: #fff;
-  transition: opacity 0.3s;
-}
+@layer components {
+  /* night grade over hero / divider artwork */
+  .night-veil::after,
+  .night-veil-band::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
 
-.footer__meta a:hover {
-  opacity: 0.75;
+  .night-veil::after {
+    background: var(--night-veil);
+  }
+
+  .night-veil-band::after {
+    background: var(--night-veil-band);
+  }
+
+  /* pointer-tracked sheen (--mx/--my set from JS) */
+  .sheen::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s;
+    background: radial-gradient(
+      56% 46% at var(--mx, 50%) var(--my, 50%),
+      rgb(190 235 255 / 22%),
+      transparent 62%
+    );
+  }
+
+  .sheen:hover::after {
+    opacity: 1;
+  }
+
+  /* screenshot deck: every card fills the deck box; the stacked offsets are
+     attribute-driven so the shuffle is one smooth transform transition */
+  .shot-deck__card[data-off='0'] {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  .shot-deck__card[data-off='1'] {
+    transform: translate(3.2%, 2.8%) rotate(1.5deg) scale(0.975);
+    filter: brightness(0.88);
+  }
+
+  .shot-deck__card[data-off='2'] {
+    transform: translate(6.2%, 5.4%) rotate(-1.8deg) scale(0.95);
+    filter: brightness(0.78);
+  }
 }
 
 /* ---------------------------------------------------------------------------
-   Responsive
---------------------------------------------------------------------------- */
-@media (max-width: 920px) {
-  .hero__manta {
-    top: auto;
-    bottom: 12vh;
-    right: -20vw;
-    width: 85vw;
-    margin-top: 0;
-    filter: drop-shadow(0 18px 26px rgba(12, 51, 77, 0.24));
-  }
-
-  .hero {
-    align-items: flex-start;
-  }
-
-  .hero__content {
-    width: 100%;
-  }
-
-  .hero__content::before {
-    inset: -8% -14%;
-  }
-
-  .hero__inner {
-    margin: 0 auto;
-    padding-top: 7rem;
-  }
-
-  .showcase .showcase__inner,
-  .showcase:nth-of-type(2n) .showcase__inner {
-    grid-template-columns: 1fr;
-  }
-
-  .showcase:nth-of-type(2n) .showcase__text {
-    order: 0;
-  }
-
-  .showcase__visual {
-    max-width: 520px;
-  }
-
-  .divider {
-    height: 46vh;
-  }
-
-  .divider__manta {
-    width: 42vw;
-    /* cheaper shadow on small screens */
-    filter: drop-shadow(0 12px 16px rgba(12, 51, 77, 0.28));
-  }
-
-  .divider__wave {
-    height: 32px;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Reduced motion
+   Reduced motion — one audit point for every animation opt-out. Unlayered,
+   so it always wins over utilities and component hooks.
 --------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -756,7 +340,6 @@ ul {
   }
 
   .reveal,
-  .reveal-item,
   .reveal-blur {
     opacity: 1;
     transform: none;
@@ -765,40 +348,38 @@ ul {
     transition: none;
   }
 
-  .hero__bg img,
-  .hero__light,
-  .hero__manta img,
-  .hero__scroll,
-  .showcase__coil {
-    animation: none;
-  }
-
-  .showcase__shot,
-  .showcase__shot:hover {
-    transform: none;
-  }
-
   /* static title colour instead of the sheen sweep */
-  .hero__title {
+  .title-sheen {
     animation: none;
     opacity: 1;
     background: none;
     -webkit-background-clip: border-box;
     background-clip: border-box;
-    color: var(--accent-deep);
+    color: #0b3550;
+  }
+
+  .hero-kenburns,
+  .hero-light,
+  .hero-manta,
+  .hero-scroll,
+  .showcase-coil,
+  .footer-sub,
+  .wave-strips path {
+    animation: none;
+  }
+
+  /* deck still switches instantly, just without the glide */
+  .shot-deck__card {
+    transition: none;
   }
 
   /* static backdrop, no swimming manta */
-  .divider__bg {
+  .divider-bg {
     top: 0;
     height: 100%;
   }
 
-  .divider__manta {
+  .divider-manta {
     display: none;
-  }
-
-  .btn:hover {
-    transform: none;
   }
 }

@@ -71,6 +71,9 @@ function wavePath(phase: number, top: boolean, off: number): string {
  * gentle rise/fall, no deformation — while the backdrop does the heavy
  * parallax against the scroll. Wavy paper edges (two-layer quilling
  * strips) top and tail the band so it doesn't read as a plain rectangle.
+ *
+ * The backdrop and manta imgs are driven imperatively (`style.transform`)
+ * — no translate/rotate/scale utilities may land on them.
  */
 export function ParallaxDivider({ image, backdrop }: DividerProps) {
   const rootRef = useRef<HTMLDivElement>(null)
@@ -78,6 +81,7 @@ export function ParallaxDivider({ image, backdrop }: DividerProps) {
   const mantaRef = useRef<HTMLImageElement>(null)
   // [top tint, top face, bottom tint, bottom face] — animated every frame
   const waveRefs = useRef<Array<SVGPathElement | null>>([null, null, null, null])
+  const phase = SEED[backdrop] * 2.3
 
   useEffect(() => {
     const root = rootRef.current
@@ -122,8 +126,7 @@ export function ParallaxDivider({ image, backdrop }: DividerProps) {
         const x = spot.u * ART_W * scale - cropX - mw / 2 + driftX
         const y = -0.35 * bandH + spot.v * ART_H * scale - mh / 2 + ty + driftY + depth
         manta.style.transform =
-          `translate3d(${x}px, ${y}px, 0)` +
-          ` rotate(${tilt * spot.face}deg) scaleX(${spot.face})`
+          `translate3d(${x}px, ${y}px, 0)` + ` rotate(${tilt * spot.face}deg) scaleX(${spot.face})`
       }
 
       // living water: the paper-wave edges slowly drift, top and bottom
@@ -160,24 +163,70 @@ export function ParallaxDivider({ image, backdrop }: DividerProps) {
       observer.disconnect()
       if (raf !== 0) cancelAnimationFrame(raf)
     }
-  }, [backdrop])
-
-  const phase = SEED[backdrop] * 2.3
+  }, [backdrop, phase])
 
   return (
-    <div className="divider" ref={rootRef} aria-hidden="true">
-      <div className="divider__frame">
-        <img ref={imgRef} className="divider__bg" src={image} alt="" loading="lazy" />
-        <img ref={mantaRef} className="divider__manta" src={mantaImg} alt="" loading="lazy" />
+    <div
+      className="relative mb-[clamp(3rem,8vh,6rem)] h-[70vh] overflow-hidden max-ocean:h-[46vh]"
+      ref={rootRef}
+      aria-hidden="true"
+    >
+      <div className="night-veil-band absolute inset-0 overflow-hidden">
+        <img
+          ref={imgRef}
+          className="divider-bg absolute top-[-35%] left-0 h-[170%] w-full object-cover [filter:brightness(1.06)_saturate(1.02)] will-change-transform"
+          src={image}
+          alt=""
+          loading="lazy"
+        />
+        <img
+          ref={mantaRef}
+          className="divider-manta absolute top-0 left-0 z-[1] w-[clamp(200px,24vw,400px)] [filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_26px_34px_rgba(0,8,16,0.5))_drop-shadow(0_0_22px_rgba(96,205,235,0.18))] will-change-transform max-ocean:w-[42vw] max-ocean:[filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_12px_16px_rgba(0,8,16,0.4))_drop-shadow(0_0_14px_rgba(96,205,235,0.15))]"
+          src={mantaImg}
+          alt=""
+          loading="lazy"
+        />
       </div>
       {/* two-layer wavy paper edges; the artwork slides in behind them */}
-      <svg className="divider__wave divider__wave--top" viewBox="0 0 1440 72" preserveAspectRatio="none">
-        <path ref={(el) => { waveRefs.current[0] = el }} d={wavePath(phase + 0.5, true, 16)} fill="var(--wave-tint)" />
-        <path ref={(el) => { waveRefs.current[1] = el }} d={wavePath(phase, true, 0)} fill="var(--bg)" />
+      <svg
+        className="pointer-events-none absolute top-[-1px] left-0 z-[2] block h-[clamp(38px,7vh,72px)] w-full [filter:drop-shadow(0_3px_6px_rgba(0,8,16,0.4))] max-ocean:h-8"
+        viewBox="0 0 1440 72"
+        preserveAspectRatio="none"
+      >
+        <path
+          ref={(el) => {
+            waveRefs.current[0] = el
+          }}
+          className="fill-wave-tint"
+          d={wavePath(phase + 0.5, true, 16)}
+        />
+        <path
+          ref={(el) => {
+            waveRefs.current[1] = el
+          }}
+          className="fill-bg"
+          d={wavePath(phase, true, 0)}
+        />
       </svg>
-      <svg className="divider__wave divider__wave--bottom" viewBox="0 0 1440 72" preserveAspectRatio="none">
-        <path ref={(el) => { waveRefs.current[2] = el }} d={wavePath(phase + 1.7, false, 16)} fill="var(--wave-tint)" />
-        <path ref={(el) => { waveRefs.current[3] = el }} d={wavePath(phase + 2.4, false, 0)} fill="var(--bg)" />
+      <svg
+        className="pointer-events-none absolute bottom-[-1px] left-0 z-[2] block h-[clamp(38px,7vh,72px)] w-full [filter:drop-shadow(0_-3px_6px_rgba(0,8,16,0.4))] max-ocean:h-8"
+        viewBox="0 0 1440 72"
+        preserveAspectRatio="none"
+      >
+        <path
+          ref={(el) => {
+            waveRefs.current[2] = el
+          }}
+          className="fill-wave-tint"
+          d={wavePath(phase + 1.7, false, 16)}
+        />
+        <path
+          ref={(el) => {
+            waveRefs.current[3] = el
+          }}
+          className="fill-bg"
+          d={wavePath(phase + 2.4, false, 0)}
+        />
       </svg>
     </div>
   )
