@@ -251,6 +251,17 @@
   .reveal-blur:nth-child(4) {
     animation-delay: 0.66s;
   }
+
+  /* image fade-in — `.img-fade` starts invisible; FadeImg flips
+     `data-loaded` when the image has decoded (cached imgs too) */
+  .img-fade {
+    opacity: 0;
+    transition: opacity 0.9s var(--ease-out);
+  }
+
+  .img-fade[data-loaded='1'] {
+    opacity: 1;
+  }
 }
 
 /* deep sea-ink letters with a cyan glint sweeping through — entrance rise +
@@ -345,6 +356,12 @@
     transform: none;
     filter: none;
     animation: none;
+    transition: none;
+  }
+
+  /* images show immediately, no fade */
+  .img-fade {
+    opacity: 1;
     transition: none;
   }
 

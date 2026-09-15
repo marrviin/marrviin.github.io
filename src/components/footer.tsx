@@ -1,6 +1,12 @@
 import { useLang } from '../i18n/language-context'
 import { publishedProjects as projects } from '../data/projects'
+import { FadeImg } from './fade-img'
+import { IconArrowUp, IconGithub, IconLaunch } from './icons'
 import submarineImg from '../assets/submarine.webp'
+
+/** Shared hover treatment for footer links with an icon. */
+const linkCls =
+  'inline-flex items-center gap-1.5 transition-colors duration-300 hover:text-accent [&>svg]:opacity-80 hover:[&>svg]:opacity-100'
 
 /**
  * Static two-layer quilled wave seam for the footer's top edge — same
@@ -51,9 +57,11 @@ export function Footer() {
           <p className="mt-[0.55rem] text-[0.82rem] text-ink-faint">
             © {year} Marvin Pan · {t.footer.rights}
           </p>
-          <img
+          <FadeImg
             className="footer-sub mt-4 block w-[min(230px,70%)] animate-sub-hover [filter:drop-shadow(0_16px_24px_rgba(0,8,16,0.45))]"
             src={submarineImg}
+            width={560}
+            height={288}
             alt=""
             aria-hidden="true"
             loading="lazy"
@@ -68,13 +76,9 @@ export function Footer() {
             {projects.map((p, i) => (
               <li key={p.name}>
                 {p.repo ? (
-                  <a
-                    className="transition-colors duration-300 hover:text-accent"
-                    href={p.repo}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {p.name} ↗
+                  <a className={linkCls} href={p.repo} target="_blank" rel="noreferrer">
+                    {p.name}
+                    <IconLaunch />
                   </a>
                 ) : (
                   <a
@@ -96,31 +100,34 @@ export function Footer() {
           <ul className="grid gap-[0.55rem] text-[0.92rem]">
             <li>
               <a
-                className="transition-colors duration-300 hover:text-accent"
+                className={linkCls}
                 href="https://github.com/marrviin"
                 target="_blank"
                 rel="noreferrer"
               >
-                GitHub ↗
+                <IconGithub />
+                GitHub
               </a>
             </li>
             <li>
               <a
-                className="transition-colors duration-300 hover:text-accent"
+                className={linkCls}
                 href="https://github.com/marrviin/marrviin.github.io"
                 target="_blank"
                 rel="noreferrer"
               >
-                {t.footer.siteSource} ↗
+                {t.footer.siteSource}
+                <IconLaunch />
               </a>
             </li>
             <li>
               <button
                 type="button"
-                className="cursor-pointer text-ink-muted transition-colors duration-300 hover:text-accent"
+                className={`cursor-pointer text-ink-muted ${linkCls}`}
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
-                {t.footer.top} ↑
+                {t.footer.top}
+                <IconArrowUp />
               </button>
             </li>
           </ul>

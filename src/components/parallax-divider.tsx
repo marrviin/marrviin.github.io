@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import mantaImg from '../assets/manta.webp'
+import { FadeImg } from './fade-img'
 
 /** The four quilled-ocean backdrops, keyed so a band and its manta
  *  anchor can never drift apart. */
@@ -172,17 +172,21 @@ export function ParallaxDivider({ image, backdrop }: DividerProps) {
       aria-hidden="true"
     >
       <div className="night-veil-band absolute inset-0 overflow-hidden">
-        <img
+        <FadeImg
           ref={imgRef}
-          className="divider-bg absolute top-[-35%] left-0 h-[170%] w-full object-cover [filter:brightness(1.06)_saturate(1.02)] will-change-transform"
+          className="img-fade divider-bg absolute top-[-35%] left-0 h-[170%] w-full object-cover [filter:brightness(1.06)_saturate(1.02)] will-change-transform"
           src={image}
+          width={1920}
+          height={1078}
           alt=""
           loading="lazy"
         />
-        <img
+        <FadeImg
           ref={mantaRef}
-          className="divider-manta absolute top-0 left-0 z-[1] w-[clamp(200px,24vw,400px)] [filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_26px_34px_rgba(0,8,16,0.5))_drop-shadow(0_0_22px_rgba(96,205,235,0.18))] will-change-transform max-ocean:w-[42vw] max-ocean:[filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_12px_16px_rgba(0,8,16,0.4))_drop-shadow(0_0_14px_rgba(96,205,235,0.15))]"
-          src={mantaImg}
+          className="img-fade divider-manta absolute top-0 left-0 z-[1] w-[clamp(200px,24vw,400px)] [filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_26px_34px_rgba(0,8,16,0.5))_drop-shadow(0_0_22px_rgba(96,205,235,0.18))] will-change-transform max-ocean:w-[42vw] max-ocean:[filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_12px_16px_rgba(0,8,16,0.4))_drop-shadow(0_0_14px_rgba(96,205,235,0.15))]"
+          src="/images/manta.webp"
+          width={1200}
+          height={1019}
           alt=""
           loading="lazy"
         />

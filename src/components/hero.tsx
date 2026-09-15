@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
-import oceanFrame from '../assets/backdrops/hero-ocean.webp'
-import mantaImg from '../assets/manta.webp'
 import { useLang } from '../i18n/language-context'
+import { FadeImg } from './fade-img'
 import { WaveStrips } from './wave-strips'
 
 /**
@@ -69,9 +68,13 @@ export function Hero() {
       ref={rootRef}
     >
       <div className="night-veil absolute inset-[-3%] will-change-transform" ref={bgRef}>
-        <img
-          className="hero-kenburns h-full w-full animate-kenburns object-cover [filter:brightness(1.05)_saturate(1.02)]"
-          src={oceanFrame}
+        <FadeImg
+          className="img-fade hero-kenburns h-full w-full animate-kenburns object-cover [filter:brightness(1.05)_saturate(1.02)]"
+          src="/images/hero-ocean.webp"
+          width={1920}
+          height={1079}
+          fetchPriority="high"
+          decoding="async"
           alt=""
           aria-hidden="true"
         />
@@ -82,7 +85,15 @@ export function Hero() {
         className="absolute top-1/2 right-[6.5vw] mt-[-4%] w-[min(46vw,620px)] [filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_30px_44px_rgba(0,8,16,0.55))_drop-shadow(0_0_26px_rgba(96,205,235,0.2))] will-change-transform max-ocean:top-auto max-ocean:right-[-20vw] max-ocean:bottom-[12vh] max-ocean:mt-0 max-ocean:w-[85vw] max-ocean:[filter:brightness(0.82)_saturate(0.85)_drop-shadow(0_18px_26px_rgba(0,8,16,0.45))_drop-shadow(0_0_18px_rgba(96,205,235,0.16))]"
         ref={mantaRef}
       >
-        <img className="hero-manta w-full animate-manta" src={mantaImg} alt="" aria-hidden="true" />
+        <img
+          className="hero-manta w-full animate-manta"
+          src="/images/manta.webp"
+          width={1200}
+          height={1019}
+          decoding="async"
+          alt=""
+          aria-hidden="true"
+        />
       </div>
 
       <div
